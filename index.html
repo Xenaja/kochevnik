@@ -4,6 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ансамбль Кочевник — Традиционная культура Чукотки</title>
+<meta name="description" content="Традиционный чукотский ансамбль «Кочевник» — аутентичные песни и танцы народов Чукотки и Аляски. Горловое пение, бубны, обряды. Концерты, корпоративы, фестивали. Москва.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://xenaja.github.io/kochevnik/">
+<meta property="og:title" content="Ансамбль Кочевник — Традиционная культура Чукотки">
+<meta property="og:description" content="Аутентичные песни и танцы народов Чукотки и Аляски. Горловое пение, бубны, обряды. Концерты, корпоративы, фестивали. С 2008 года.">
+<meta property="og:image" content="https://xenaja.github.io/kochevnik/photos/Hero/1.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="851">
+<meta property="og:locale" content="ru_RU">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://xenaja.github.io/kochevnik/">
 <link rel="icon" href="photos/logo.jpg" type="image/jpeg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
@@ -674,6 +685,12 @@
 
   .form-privacy { font-size: 11px; font-weight: 300; color: var(--dim); margin-top: 14px; letter-spacing: 0.03em; }
   .form-privacy a { color: var(--muted); }
+
+  .form-consent { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; margin-bottom: 14px; }
+  .form-consent label { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; font-weight: 300; color: var(--muted); line-height: 1.5; cursor: pointer; }
+  .form-consent input[type="checkbox"] { flex-shrink: 0; margin-top: 2px; accent-color: var(--rose); width: 15px; height: 15px; cursor: pointer; }
+  .form-consent a { color: var(--muted); text-decoration: underline; }
+  .form-consent a:hover { color: var(--rose); }
 
   /* ── FOOTER ── */
   footer {
@@ -1458,8 +1475,17 @@
           <input class="form-input" type="text" placeholder="Месяц, год">
         </div>
       </div>
-      <a href="#" class="btn-primary" style="display:block; text-align:center; margin-top:16px;">Отправить заявку</a>
-      <p class="form-privacy">Нажимая кнопку, вы соглашаетесь с <a href="#">политикой обработки персональных данных</a></p>
+      <div class="form-consent">
+        <label>
+          <input type="checkbox" id="consent1" required>
+          Соглашаюсь на <a href="/privacy.html" target="_blank">обработку персональных данных</a>
+        </label>
+        <label>
+          <input type="checkbox" id="consent2" required>
+          Ознакомлен(-а) с <a href="/privacy.html" target="_blank">политикой конфиденциальности</a>
+        </label>
+      </div>
+      <button type="button" class="btn-primary" id="formSubmit" onclick="submitForm()" style="display:block; width:100%; text-align:center;">Отправить заявку</button>
     </div>
   </div>
 </section>
@@ -1728,6 +1754,17 @@ document.addEventListener('keydown', function(e) {
     document.getElementById('popup').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
+  function submitForm() {
+    const c1 = document.getElementById('consent1');
+    const c2 = document.getElementById('consent2');
+    if (!c1.checked || !c2.checked) {
+      alert('Пожалуйста, подтвердите согласие на обработку персональных данных.');
+      return;
+    }
+    // Здесь будет отправка через PHP — подключим после настройки хостинга
+    alert('Спасибо! Мы свяжемся с вами в ближайшее время.');
+  }
+
   function closePopup() {
     document.getElementById('popup').classList.remove('open');
     document.body.style.overflow = '';
