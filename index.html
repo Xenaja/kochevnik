@@ -77,7 +77,7 @@
   /* Плавный переход при смене темы */
   body, nav, .status-bar, .lead-magnet, .program-card, .faq-item,
   footer, .lead-form, .cta-form, .evgeny-section, .about, .faq,
-  .cta-section, .gallery, .programs, .hero-bg, .concept-overlay {
+  .cta-section, .gallery, .programs, .hero-bg {
     transition: background-color 0.45s ease, color 0.35s ease, border-color 0.35s ease;
   }
 
@@ -293,28 +293,26 @@
   /* ── DRUM PULSE ── */
   .drum-pulse { animation: none; }
 
-  @keyframes pulse-stroke {
-    0%   { stroke-opacity: 1;    stroke-width: 0.8; }
-    45%  { stroke-opacity: 0.18; stroke-width: 3.5; }
-    55%  { stroke-opacity: 1;    stroke-width: 0.8; }
-    100% { stroke-opacity: 1;    stroke-width: 0.8; }
-  }
-  @keyframes pulse-stroke-dash {
-    0%   { stroke-opacity: 0.9;  stroke-width: 0.5; }
-    45%  { stroke-opacity: 0.15; stroke-width: 3; }
-    55%  { stroke-opacity: 0.9;  stroke-width: 0.5; }
-    100% { stroke-opacity: 0.9;  stroke-width: 0.5; }
+  @keyframes drum-ripple {
+    0%   { stroke-opacity: 0.85; stroke-width: 0.8; transform: scale(1); }
+    18%  { stroke-opacity: 1;    stroke-width: 3;   transform: scale(1.04); }
+    55%  { stroke-opacity: 0.15; stroke-width: 0.4; transform: scale(0.97); }
+    100% { stroke-opacity: 0.85; stroke-width: 0.8; transform: scale(1); }
   }
 
-  .drum-pulse circle.p1 { animation: pulse-stroke      3.8s ease-in-out infinite; }
-  .drum-pulse circle.p2 { animation: pulse-stroke-dash  2.8s ease-in-out infinite 0.18s; }
-  .drum-pulse circle.p3 { animation: pulse-stroke      2.8s ease-in-out infinite 0.36s; }
-  .drum-pulse circle.p4 { animation: pulse-stroke-dash  2.8s ease-in-out infinite 0.54s; }
-  .drum-pulse circle.p5 { animation: pulse-stroke      2.8s ease-in-out infinite 0.72s; }
+  .drum-pulse circle {
+    transform-box: fill-box;
+    transform-origin: center center;
+  }
+  .drum-pulse circle.p1 { animation: drum-ripple 2.4s ease-in-out infinite; }
+  .drum-pulse circle.p2 { animation: drum-ripple 2.4s ease-in-out infinite 0.28s; }
+  .drum-pulse circle.p3 { animation: drum-ripple 2.4s ease-in-out infinite 0.56s; }
+  .drum-pulse circle.p4 { animation: drum-ripple 2.4s ease-in-out infinite 0.84s; }
+  .drum-pulse circle.p5 { animation: drum-ripple 2.4s ease-in-out infinite 1.12s; }
 
   .hero-drum {
     position: absolute; right: 60px; top: 50%; transform: translateY(-50%);
-    width: 520px; height: 520px; opacity: 0.11; pointer-events: none; z-index: 5;
+    width: 520px; height: 520px; opacity: 0.18; pointer-events: none; z-index: 5;
   }
 
   .hero-content { position: relative; z-index: 6; max-width: 650px; width: 100%; }
@@ -687,22 +685,13 @@
   .footer-logo em { font-style: normal; color: var(--rose-lt); }
   .footer-copy { font-size: 12px; font-weight: 300; color: var(--muted); letter-spacing: 0.05em; }
 
-  /* ── CONCEPT OVERLAY ── */
-  .concept-overlay {
-    position: fixed; bottom: 20px; right: 20px;
-    background: rgba(13,21,38,0.97); border: 1px solid var(--rose-dim);
-    padding: 18px 22px; max-width: 280px; z-index: 200; font-size: 13px; color: var(--muted);
-  }
-  .concept-overlay strong { display: block; color: var(--rose-lt); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
-  .concept-overlay p { margin-bottom: 5px; line-height: 1.5; font-size: 12px; }
-  .concept-overlay .close-btn { position: absolute; top: 8px; right: 10px; background: none; border: none; color: var(--dim); cursor: pointer; font-size: 15px; line-height: 1; }
 
   .fade-in { opacity: 1; transform: none; }
 
   /* ── ДЕКОР ── */
   .deco { position: absolute; pointer-events: none; z-index: 0; }
-  .deco-drum  { opacity: 0.12; }
-  .deco-whale { opacity: 0.5;  }
+  .deco-drum  { opacity: 0.22; }
+  .deco-whale { opacity: 0.55; }
 
   /* ── MOBILE NAV ── */
   .hamburger { display: none; }
@@ -875,6 +864,97 @@
     .lightbox-prev { left: 8px; }
     .lightbox-next { right: 8px; }
   }
+
+  /* ══ STICKY CTA ══ */
+  .sticky-cta {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 900;
+    background: var(--rose); color: #fff;
+    padding: 15px 60px 15px 20px;
+    display: flex; align-items: center; justify-content: center; gap: 20px;
+    transform: translateY(100%); transition: transform 0.4s ease;
+    text-decoration: none;
+  }
+  .sticky-cta.visible { transform: translateY(0); }
+  .sticky-cta-text {
+    font-size: 13px; font-weight: 400; letter-spacing: 0.15em;
+    text-transform: uppercase; color: #fff;
+  }
+  .sticky-cta-close {
+    position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: rgba(255,255,255,0.6);
+    font-size: 20px; cursor: pointer; line-height: 1; padding: 4px 8px;
+  }
+  .sticky-cta-close:hover { color: #fff; }
+
+  /* ══ ПЛАВАЮЩИЕ КНОПКИ ══ */
+  .float-social {
+    position: fixed; right: 20px; bottom: 80px; z-index: 800;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .float-btn {
+    width: 46px; height: 46px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-size: 20px;
+  }
+  .float-btn:hover { transform: scale(1.1); box-shadow: 0 6px 18px rgba(0,0,0,0.4); }
+  .float-btn-vk { background: #0077FF; }
+  .float-btn-tg { background: #2AABEE; }
+
+  /* ══ POPUP ══ */
+  .popup-overlay {
+    position: fixed; inset: 0; z-index: 5000;
+    background: rgba(8,12,22,0.88);
+    display: none; align-items: center; justify-content: center;
+  }
+  .popup-overlay.open { display: flex; }
+  .popup-box {
+    background: var(--card); border: 1px solid var(--dim);
+    padding: 48px 40px; max-width: 460px; width: 90%;
+    position: relative;
+    animation: popupIn 0.35s ease;
+  }
+  @keyframes popupIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .popup-close {
+    position: absolute; top: 16px; right: 20px;
+    background: none; border: none; color: var(--muted);
+    font-size: 22px; cursor: pointer; line-height: 1;
+    transition: color 0.2s;
+  }
+  .popup-close:hover { color: var(--rose); }
+  .popup-label {
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--rose); margin-bottom: 16px;
+  }
+  .popup-title {
+    font-family: var(--f-display); font-size: 26px; font-weight: 700;
+    color: var(--bone); line-height: 1.25; margin-bottom: 14px;
+  }
+  .popup-text {
+    font-size: 15px; font-weight: 300; color: var(--muted);
+    line-height: 1.7; margin-bottom: 28px;
+  }
+  .popup-btn {
+    display: block; width: 100%; text-align: center;
+    background: var(--rose); color: #fff; border: none;
+    padding: 14px 20px; font-family: 'Jost', sans-serif;
+    font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase;
+    cursor: pointer; text-decoration: none;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    transition: background 0.3s;
+  }
+  .popup-btn:hover { background: var(--rose-lt); }
+  .popup-skip {
+    display: block; text-align: center; margin-top: 14px;
+    font-size: 12px; color: var(--dim); cursor: pointer;
+    letter-spacing: 0.08em;
+  }
+  .popup-skip:hover { color: var(--muted); }
 </style>
 </head>
 <body>
@@ -1131,23 +1211,19 @@
 
 <!-- ════════════════ ПРОГРАММЫ ════════════════ -->
 <section class="programs" id="programs">
-  <div class="deco deco-whale" style="left:-30px; bottom:-10px; width:720px;">
-    <svg viewBox="0 0 720 280" fill="none" width="100%" xmlns="http://www.w3.org/2000/svg">
+  <div class="deco deco-whale" style="left:50%; transform:translateX(-50%); bottom:-20px; width:820px;">
+    <svg viewBox="0 0 820 310" fill="none" width="100%" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <clipPath id="flukeClip">
-          <path d="M 10 200 C 10 170, 30 130, 80 105 C 130 80, 210 75, 270 105 C 300 120, 340 148, 360 155 C 380 148, 420 120, 450 105 C 510 75, 590 80, 640 105 C 690 130, 710 170, 710 200 C 690 230, 650 250, 590 240 C 540 232, 490 210, 440 205 C 420 203, 400 205, 385 212 C 378 216, 372 222, 360 228 C 348 222, 342 216, 335 212 C 320 205, 300 203, 280 205 C 230 210, 180 232, 130 240 C 70 250, 30 230, 10 200 Z"/>
+          <path d="M 410 292 C 388 276, 350 256, 308 244 C 252 230, 180 232, 122 212 C 72 196, 30 162, 10 126 C -8 90, 6 52, 36 40 C 66 28, 106 46, 148 74 C 196 106, 240 152, 282 190 C 318 222, 350 258, 368 280 C 382 296, 410 305, 410 292 C 410 305, 438 296, 452 280 C 470 258, 502 222, 538 190 C 580 152, 624 106, 672 74 C 714 46, 754 28, 784 40 C 814 52, 828 90, 810 126 C 790 162, 748 196, 698 212 C 640 232, 568 230, 512 244 C 470 256, 432 276, 410 292 Z"/>
         </clipPath>
+        <pattern id="whaleStripes" x="0" y="0" width="820" height="18" patternUnits="userSpaceOnUse">
+          <line x1="0" y1="0" x2="820" y2="0" stroke="#4A72AA" stroke-width="1.6"/>
+        </pattern>
       </defs>
-      <path d="M 10 200 C 10 170, 30 130, 80 105 C 130 80, 210 75, 270 105 C 300 120, 340 148, 360 155 C 380 148, 420 120, 450 105 C 510 75, 590 80, 640 105 C 690 130, 710 170, 710 200 C 690 230, 650 250, 590 240 C 540 232, 490 210, 440 205 C 420 203, 400 205, 385 212 C 378 216, 372 222, 360 228 C 348 222, 342 216, 335 212 C 320 205, 300 203, 280 205 C 230 210, 180 232, 130 240 C 70 250, 30 230, 10 200 Z" fill="#1E3464"/>
-      <g clip-path="url(#flukeClip)" stroke="#4A72AA" fill="none">
-        <path d="M 10 175 C 80 148, 200 138, 310 148 C 335 151, 350 157, 360 162 C 370 157, 385 151, 410 148 C 520 138, 640 148, 710 175" stroke-width="2"/>
-        <path d="M 10 187 C 80 162, 200 152, 308 163 C 334 167, 350 173, 360 178 C 370 173, 386 167, 412 163 C 520 152, 640 162, 710 187" stroke-width="2"/>
-        <path d="M 10 198 C 80 176, 200 166, 306 177 C 332 181, 349 188, 360 193 C 371 188, 388 181, 414 177 C 520 166, 640 176, 710 198" stroke-width="1.8"/>
-        <path d="M 15 210 C 85 190, 200 180, 305 191 C 331 195, 349 202, 360 207 C 371 202, 389 195, 415 191 C 520 180, 635 190, 705 210" stroke-width="1.6"/>
-        <path d="M 25 220 C 90 203, 200 194, 305 205 C 331 209, 349 215, 360 220 C 371 215, 389 209, 415 205 C 520 194, 630 203, 695 220" stroke-width="1.4"/>
-        <path d="M 40 230 C 100 215, 200 207, 310 217 C 335 221, 350 226, 360 231 C 370 226, 385 221, 410 217 C 520 207, 620 215, 680 230" stroke-width="1.2"/>
-      </g>
-      <path d="M 10 200 C 10 170, 30 130, 80 105 C 130 80, 210 75, 270 105 C 300 120, 340 148, 360 155 C 380 148, 420 120, 450 105 C 510 75, 590 80, 640 105 C 690 130, 710 170, 710 200 C 690 230, 650 250, 590 240 C 540 232, 490 210, 440 205 C 420 203, 400 205, 385 212 C 378 216, 372 222, 360 228 C 348 222, 342 216, 335 212 C 320 205, 300 203, 280 205 C 230 210, 180 232, 130 240 C 70 250, 30 230, 10 200 Z" fill="none" stroke="#6A9ACC" stroke-width="1.5"/>
+      <path d="M 410 292 C 388 276, 350 256, 308 244 C 252 230, 180 232, 122 212 C 72 196, 30 162, 10 126 C -8 90, 6 52, 36 40 C 66 28, 106 46, 148 74 C 196 106, 240 152, 282 190 C 318 222, 350 258, 368 280 C 382 296, 410 305, 410 292 C 410 305, 438 296, 452 280 C 470 258, 502 222, 538 190 C 580 152, 624 106, 672 74 C 714 46, 754 28, 784 40 C 814 52, 828 90, 810 126 C 790 162, 748 196, 698 212 C 640 232, 568 230, 512 244 C 470 256, 432 276, 410 292 Z" fill="#1A2E5A"/>
+      <rect width="820" height="310" fill="url(#whaleStripes)" clip-path="url(#flukeClip)" opacity="0.7"/>
+      <path d="M 410 292 C 388 276, 350 256, 308 244 C 252 230, 180 232, 122 212 C 72 196, 30 162, 10 126 C -8 90, 6 52, 36 40 C 66 28, 106 46, 148 74 C 196 106, 240 152, 282 190 C 318 222, 350 258, 368 280 C 382 296, 410 305, 410 292 C 410 305, 438 296, 452 280 C 470 258, 502 222, 538 190 C 580 152, 624 106, 672 74 C 714 46, 754 28, 784 40 C 814 52, 828 90, 810 126 C 790 162, 748 196, 698 212 C 640 232, 568 230, 512 244 C 470 256, 432 276, 410 292 Z" fill="none" stroke="#5A80B8" stroke-width="1.5"/>
     </svg>
   </div>
   <div class="programs-header">
@@ -1417,13 +1493,6 @@
   </div>
 </footer>
 
-<div class="concept-overlay" id="cn">
-  <button class="close-btn" onclick="document.getElementById('cn').style.display='none'">✕</button>
-  <strong>Версия с переключением</strong>
-  <p>🌙 Тёмная / ☀️ Светлая тема</p>
-  <p>Галерея: отредактируйте galleryPhotos[]</p>
-  <p>Фото, видео, цитаты, телефон — от Ани</p>
-</div>
 
 <script>
   // ══════════════════════════════════════════
@@ -1640,6 +1709,71 @@ document.addEventListener('keydown', function(e) {
     <iframe id="videoFrame" src="" allow="autoplay; fullscreen" allowfullscreen></iframe>
   </div>
 </div>
+
+<!-- ══ STICKY CTA ══ -->
+<div class="sticky-cta" id="stickyCta">
+  <span class="sticky-cta-text">Заказать выступление ансамбля</span>
+  <a href="#contact" class="btn-primary" style="padding:10px 24px; font-size:12px; white-space:nowrap;" onclick="document.getElementById('stickyCta').classList.remove('visible')">Оставить заявку</a>
+  <button class="sticky-cta-close" onclick="document.getElementById('stickyCta').classList.remove('visible')" aria-label="Закрыть">✕</button>
+</div>
+
+<!-- ══ ПЛАВАЮЩИЕ КНОПКИ ══ -->
+<div class="float-social" id="floatSocial">
+  <a class="float-btn float-btn-vk" href="https://vk.ru/chuk.ans_kochevnik" target="_blank" rel="noopener" title="ВКонтакте">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M15.07 2H8.93C3.33 2 2 3.33 2 8.93v6.14C2 20.67 3.33 22 8.93 22h6.14C20.67 22 22 20.67 22 15.07V8.93C22 3.33 20.67 2 15.07 2zm3.08 13.5h-1.57c-.6 0-.78-.48-1.85-1.57-1.03-1.03-1.48-.97-1.73-.97-.35 0-.45.1-.45.6v1.43c0 .43-.13.68-1.23.68-1.8 0-3.8-1.1-5.2-3.13C5 10.08 4.5 8.12 4.5 7.67c0-.25.1-.48.6-.48h1.57c.45 0 .62.2.8.68.87 2.5 2.33 4.7 2.93 4.7.22 0 .32-.1.32-.65V9.77c-.07-1.17-.68-1.27-.68-1.68 0-.2.17-.4.43-.4h2.47c.37 0 .5.2.5.63v3.4c0 .37.17.5.27.5.22 0 .4-.13.8-.53 1.25-1.4 2.13-3.55 2.13-3.55.12-.25.32-.48.77-.48h1.57c.47 0 .57.24.47.57-.2.93-2.13 3.65-2.13 3.65-.17.28-.23.4 0 .7.17.23.73.7 1.1 1.13.68.77 1.2 1.42 1.33 1.87.15.43-.07.65-.52.65z"/></svg>
+  </a>
+  <a class="float-btn float-btn-tg" href="https://t.me/umkaininyn" target="_blank" rel="noopener" title="Написать в Telegram">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.68 7.93c-.12.58-.46.72-.93.45l-2.57-1.9-1.24 1.2c-.14.14-.26.26-.53.26l.19-2.67 4.87-4.4c.21-.19-.05-.29-.33-.1L7.9 14.38l-2.53-.79c-.55-.17-.56-.55.12-.82l9.88-3.81c.46-.17.86.11.27.84z"/></svg>
+  </a>
+</div>
+
+<!-- ══ POPUP ══ -->
+<div class="popup-overlay" id="popup" onclick="if(event.target===this)closePopup()">
+  <div class="popup-box">
+    <button class="popup-close" onclick="closePopup()">✕</button>
+    <div class="popup-label">Специальное предложение</div>
+    <div class="popup-title">Узнайте стоимость выступления для вашего мероприятия</div>
+    <p class="popup-text">Оставьте заявку — мы подберём формат и ответим в течение дня. Концерт, мастер-класс, кочевая зона — обсудим всё.</p>
+    <a href="#contact" class="popup-btn" onclick="closePopup()">Оставить заявку</a>
+    <span class="popup-skip" onclick="closePopup()">Не сейчас</span>
+  </div>
+</div>
+
+<script>
+  // ══ STICKY CTA ══
+  const stickyCta = document.getElementById('stickyCta');
+  const heroSection = document.getElementById('hero');
+  const contactSection = document.getElementById('contact');
+  window.addEventListener('scroll', function() {
+    const heroBottom = heroSection.getBoundingClientRect().bottom;
+    const contactTop = contactSection.getBoundingClientRect().top;
+    if (heroBottom < 0 && contactTop > window.innerHeight) {
+      stickyCta.classList.add('visible');
+    } else {
+      stickyCta.classList.remove('visible');
+    }
+  });
+
+  // ══ POPUP ══
+  let popupShown = false;
+  function openPopup() {
+    if (popupShown || sessionStorage.getItem('popupShown')) return;
+    popupShown = true;
+    sessionStorage.setItem('popupShown', '1');
+    document.getElementById('popup').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closePopup() {
+    document.getElementById('popup').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  // Через 30 секунд
+  setTimeout(openPopup, 30000);
+  // При уходе со страницы (exit intent)
+  document.addEventListener('mouseleave', function(e) {
+    if (e.clientY <= 0) openPopup();
+  });
+</script>
 
 </body>
 </html>
