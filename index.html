@@ -183,32 +183,29 @@
     padding: 120px 60px 80px; overflow: hidden;
   }
 
-  /* Hero background */
+  /* Hero video background */
   .hero-bg {
     position: absolute; inset: 0; z-index: 1;
-    background:
-      radial-gradient(ellipse 70% 90% at 68% 50%, rgba(30,48,96,0.55) 0%, transparent 70%),
-      radial-gradient(ellipse 35% 55% at 15% 85%, rgba(44,78,130,0.12) 0%, transparent 60%),
-      linear-gradient(155deg, var(--ink) 0%, var(--deep) 55%, var(--ink) 100%);
+    overflow: hidden;
+    background: var(--ink);
   }
 
-  /* Портрет справа — на всю высоту */
-  .hero-portrait {
-    position: absolute; right: 0; top: 0; bottom: 0;
-    width: 42%;
-    z-index: 3; overflow: hidden;
-    pointer-events: none;
-  }
-  .hero-portrait::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-    width: 200px; z-index: 1;
-    background: linear-gradient(to right, var(--ink), transparent);
-  }
-  .hero-portrait img {
+  .hero-video {
+    position: absolute; inset: 0;
     width: 100%; height: 100%;
-    object-fit: cover; object-position: center top;
+    object-fit: cover;
+    object-position: 70% center;
   }
-  @media (max-width: 900px) { .hero-portrait { display: none; } }
+
+  .hero-overlay {
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(to right,
+      rgba(4,20,30,0.92) 0%,
+      rgba(4,20,30,0.60) 40%,
+      rgba(4,20,30,0.10) 75%,
+      transparent 100%
+    );
+  }
 
   /* ── AURORA BOREALIS ── */
   .aurora { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
@@ -433,7 +430,11 @@
 
   .about-grid {
     display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
-    align-items: start; max-width: 1200px; margin: 0 auto;
+    align-items: stretch; max-width: 1200px; margin: 0 auto;
+  }
+
+  .about-grid > div:last-child {
+    min-height: 480px;
   }
 
   .about-text p { font-size: 16px; font-weight: 300; color: var(--muted); margin-bottom: 20px; line-height: 1.85; }
@@ -527,8 +528,8 @@
     position: relative; overflow: hidden;
     cursor: pointer; border: 1px solid var(--dim);
   }
-  .gallery-item.landscape { grid-column: span 2; }
-  .gallery-item.portrait  { grid-column: span 1; }
+  .gallery-item.landscape { grid-column: span 2; grid-row: span 1; }
+  .gallery-item.portrait  { grid-column: span 1; grid-row: span 2; }
 
   .gallery-item img {
     width: 100%; height: 100%; display: block;
@@ -779,6 +780,7 @@
     .hero { padding: 100px 32px 70px; }
     .hero-drum { width: 340px; height: 340px; right: -80px; opacity: 0.08; }
     .hero-title-name { font-size: clamp(64px, 10vw, 110px); }
+    .hero-video { object-position: 65% center; }
 
     .status-bar { padding: 16px 24px; }
     .status-item { padding: 10px 22px; }
@@ -789,6 +791,8 @@
     .gallery     { padding: 72px 32px; }
 
     .evgeny-grid  { grid-template-columns: 1fr; gap: 44px; }
+    .about-grid   { grid-template-columns: 1fr; gap: 40px; }
+    .about-grid > div:last-child { min-height: 320px; }
     .photo-placeholder { aspect-ratio: 4/3; max-width: 500px; }
     .programs-grid { grid-template-columns: 1fr; gap: 2px; }
     .gallery-grid  { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 220px; }
@@ -797,6 +801,18 @@
     .cta-inner     { grid-template-columns: 1fr; gap: 52px; }
 
     footer { padding: 32px 28px; flex-direction: column; gap: 16px; text-align: center; }
+  }
+
+  /* ══════════════════ МОБИЛЬНЫЙ ВИДЕО ≤ 768px ══════════════════ */
+  @media (max-width: 768px) {
+    .hero-video { object-position: 60% top; }
+    .hero-overlay {
+      background: linear-gradient(to top,
+        rgba(4,20,30,0.96) 0%,
+        rgba(4,20,30,0.70) 50%,
+        rgba(4,20,30,0.30) 100%
+      );
+    }
   }
 
   /* ══════════════════ МОБИЛЬНЫЙ ≤ 480px ══════════════════ */
@@ -1046,7 +1062,12 @@
 
 <!-- ════════════════ HERO ════════════════ -->
 <section class="hero" id="hero">
-  <div class="hero-bg"></div>
+  <div class="hero-bg">
+    <video class="hero-video" autoplay muted loop playsinline poster="photos/Hero/hero-poster.jpg">
+      <source src="photos/Hero/loop-web.mp4" type="video/mp4" media="(min-width: 769px)">
+    </video>
+    <div class="hero-overlay"></div>
+  </div>
   <div class="aurora">
     <div class="aurora-band aurora-1"></div>
     <div class="aurora-band aurora-2"></div>
@@ -1072,10 +1093,6 @@
       <polygon points="22,260 36,270 50,260 36,250"   fill="#2C4E82" fill-opacity="0.8"/>
       <polygon points="470,260 484,270 498,260 484,250" fill="#2C4E82" fill-opacity="0.8"/>
     </svg>
-  </div>
-
-  <div class="hero-portrait">
-    <img src="photos/Hero/4.jpg" alt="Ансамбль Кочевник">
   </div>
 
   <div class="hero-content">
@@ -1159,16 +1176,19 @@
       <polygon points="470,260 484,270 498,260 484,250" fill="#2C4E82"/>
     </svg>
   </div>
-  <div style="max-width: 760px; margin: 0 auto;">
-    <div class="section-label fade-in">О нас</div>
-    <h2 class="section-title fade-in delay-1">«Кочевник» — <em>живая</em> культура чукчей и эскимосов, которую несут люди, для которых это не сцена, а жизнь.</h2>
-    <p class="fade-in delay-2" style="font-size:16px; font-weight:300; color:var(--muted); line-height:1.85; margin-bottom:20px;">Ансамбль создан в 2008 году при поддержке Чукотского автономного округа, Чукотского района, с. Лорино — ТСОКМНЧ. В составе — настоящие представители чукотского и эскимосского народов. Все костюмы сшиты вручную, все песни и танцы исполняются под живой звук бубна.</p>
-    <p class="fade-in delay-3" style="font-size:16px; font-weight:300; color:var(--muted); line-height:1.85; margin-bottom:20px;">За 15 лет — фестивали в США, Франции, Германии, Норвегии, Бельгии, Румынии, Японии, Южной Корее, Китае. Выступление на саммите Россия-Африка 2019 в Сочи в присутствии Президента РФ. Яранга, которая стояла на Красной площади.</p>
-    <div class="ornament-thin" style="margin: 30px 0;"></div>
-    <div class="fade-in delay-4" style="margin-top:32px;">
-      <img src="photos/sostav/photo_53_2026-04-06_19-51-21.jpg" alt="Состав ансамбля Кочевник"
-        style="width:100%; max-width:760px; display:block; border:1px solid var(--dim); filter:saturate(0.85);">
-      <p style="font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--dim); margin-top:10px;">Состав ансамбля</p>
+  <div class="about-grid">
+    <!-- Текст слева -->
+    <div class="about-text">
+      <div class="section-label fade-in">О нас</div>
+      <h2 class="section-title fade-in delay-1">«Кочевник» — <em>живая</em> культура чукчей и эскимосов, которую несут люди, для которых это не сцена, а жизнь.</h2>
+      <p class="fade-in delay-2">Ансамбль создан в 2008 году при поддержке Чукотского автономного округа, Чукотского района, с. Лорино — ТСОКМНЧ. В составе — настоящие представители чукотского и эскимосского народов. Все костюмы сшиты вручную, все песни и танцы исполняются под живой звук бубна.</p>
+      <p class="fade-in delay-3">За 15 лет — фестивали в США, Франции, Германии, Норвегии, Бельгии, Румынии, Японии, Южной Корее, Китае. Выступление на саммите Россия-Африка 2019 в Сочи в присутствии Президента РФ. Яранга, которая стояла на Красной площади.</p>
+    </div>
+    <!-- Фото справа -->
+    <div class="fade-in delay-2" style="position: relative;">
+      <img src="photos/Hero/4.jpg" alt="Ансамбль Кочевник — мужчина с бубном"
+        style="width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; border: 1px solid var(--dim); filter: saturate(0.9);">
+      <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--rose);"></div>
     </div>
   </div>
 </section>
@@ -1516,25 +1536,27 @@
 
 <script>
   // ══════════════════════════════════════════
-  // ГАЛЕРЕЯ — отредактируйте список фото зде��ь
+  // ГАЛЕРЕЯ — отредактируйте список фото здесь
+  // orient: 'landscape' = горизонтальное (span 2 кол.)
+  //         'portrait'  = вертикальное   (span 2 строки)
   // ══════════════════════════════════════════
   const galleryPhotos = [
-    'photos/gallery/1.jpg',
-    'photos/gallery/2.jpg',
-    'photos/gallery/3.jpg',
-    'photos/gallery/4.jpg',
-    'photos/gallery/5.jpg',
-    'photos/gallery/6.jpg',
-    'photos/gallery/7.jpg',
-    'photos/gallery/8.jpg',
-    'photos/gallery/9.jpg',
-    'photos/gallery/10.jpg',
-    'photos/gallery/11.jpg',
-    'photos/gallery/12.jpg',
-    'photos/gallery/13.jpg',
-    'photos/gallery/14.jpg',
-    'photos/gallery/15.jpg',
-    'photos/gallery/16.jpg',
+    { src: 'photos/gallery/14.jpg', orient: 'landscape' }, // весь ансамбль на сцене
+    { src: 'photos/gallery/16.jpg', orient: 'portrait'  }, // девушка у яранги зимой
+    { src: 'photos/gallery/11.jpg', orient: 'landscape' }, // двое с бубном, смеются
+    { src: 'photos/gallery/2.jpg',  orient: 'landscape' }, // семья с гусем
+    { src: 'photos/gallery/13.jpg', orient: 'portrait'  }, // сцена с дымом
+    { src: 'photos/gallery/6.jpg',  orient: 'landscape' }, // танцующие девушки
+    { src: 'photos/gallery/1.jpg',  orient: 'landscape' }, // мальчик в костюме
+    { src: 'photos/gallery/8.jpg',  orient: 'portrait'  }, // девушка с колокольчиками
+    { src: 'photos/gallery/7.jpg',  orient: 'landscape' },
+    { src: 'photos/gallery/3.jpg',  orient: 'landscape' },
+    { src: 'photos/gallery/9.jpg',  orient: 'portrait'  }, // яранга у Кремля
+    { src: 'photos/gallery/5.jpg',  orient: 'landscape' },
+    { src: 'photos/gallery/10.jpg', orient: 'landscape' },
+    { src: 'photos/gallery/4.jpg',  orient: 'landscape' },
+    { src: 'photos/gallery/12.jpg', orient: 'landscape' },
+    { src: 'photos/gallery/15.jpg', orient: 'landscape' },
   ];
 
   // ══ РЕНДЕР ГАЛЕРЕИ ══
@@ -1544,18 +1566,15 @@
     const grid = document.getElementById('galleryGrid');
     if (!grid) return;
     const isMobile = window.innerWidth < 640;
-    galleryPhotos.forEach((src, i) => {
+    galleryPhotos.forEach((photo, i) => {
       const item = document.createElement('div');
-      item.className = 'gallery-item fade-in';
+      item.className = 'gallery-item fade-in ' + photo.orient;
       if (isMobile && i >= MOBILE_GALLERY_LIMIT) item.classList.add('hidden-mobile');
       item.onclick = () => openLightbox(i);
       const img = document.createElement('img');
-      img.src = src;
+      img.src = photo.src;
       img.alt = 'Ансамбль Кочевник — фото ' + (i + 1);
       img.loading = 'lazy';
-      img.onload = function() {
-        item.classList.add(this.naturalWidth >= this.naturalHeight ? 'landscape' : 'portrait');
-      };
       item.appendChild(img);
       grid.appendChild(item);
     });
@@ -1595,7 +1614,7 @@
   }
 
   function updateLightbox() {
-    document.getElementById('lightboxImg').src = galleryPhotos[currentPhotoIndex];
+    document.getElementById('lightboxImg').src = galleryPhotos[currentPhotoIndex].src;
     document.getElementById('lightboxCounter').textContent = (currentPhotoIndex + 1) + ' / ' + galleryPhotos.length;
   }
 
