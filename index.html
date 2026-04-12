@@ -1561,12 +1561,16 @@
     galleryPhotos.forEach((src, i) => {
       const item = document.createElement('div');
       item.className = 'gallery-item fade-in';
-      if (i >= GALLERY_PAGE_SIZE) item.style.display = 'none';
       item.onclick = () => openLightbox(i);
       const img = document.createElement('img');
-      img.src = src;
       img.alt = 'Ансамбль Кочевник — фото ' + (i + 1);
-      img.loading = 'lazy';
+      if (i < GALLERY_PAGE_SIZE) {
+        img.src = src;
+        img.loading = 'lazy';
+      } else {
+        img.dataset.src = src;   // не грузим, пока скрыто
+        item.style.display = 'none';
+      }
       item.appendChild(img);
       grid.appendChild(item);
     });
@@ -1576,8 +1580,16 @@
   })();
 
   function showMoreGallery() {
-    const hidden = [...document.querySelectorAll('#galleryGrid .gallery-item')].filter(el => el.style.display === 'none');
-    hidden.slice(0, GALLERY_PAGE_SIZE).forEach(el => { el.style.display = ''; });
+    const hidden = [...document.querySelectorAll('#galleryGrid .gallery-item[style*="display: none"]')];
+    hidden.slice(0, GALLERY_PAGE_SIZE).forEach(el => {
+      const img = el.querySelector('img');
+      if (img.dataset.src) {
+        img.src = img.dataset.src;   // начинаем загрузку только сейчас
+        img.loading = 'lazy';
+        delete img.dataset.src;
+      }
+      el.style.display = '';
+    });
     if (hidden.length <= GALLERY_PAGE_SIZE) {
       document.getElementById('galleryShowMore').style.display = 'none';
     }
