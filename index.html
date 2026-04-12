@@ -959,60 +959,8 @@
   .float-btn-vk { background: #0077FF; }
   .float-btn-tg { background: #2AABEE; }
 
-  /* ══ POPUP ══ */
-  .popup-overlay {
-    position: fixed; inset: 0; z-index: 5000;
-    background: rgba(8,12,22,0.88);
-    display: none; align-items: center; justify-content: center;
-  }
-  .popup-overlay.open { display: flex; }
-  .popup-box {
-    background: var(--card); border: 1px solid var(--dim);
-    padding: 48px 40px; max-width: 460px; width: 90%;
-    position: relative;
-    animation: popupIn 0.35s ease;
-  }
-  @keyframes popupIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .popup-close {
-    position: absolute; top: 16px; right: 20px;
-    background: none; border: none; color: var(--muted);
-    font-size: 22px; cursor: pointer; line-height: 1;
-    transition: color 0.2s;
-  }
-  .popup-close:hover { color: var(--rose); }
-  .popup-label {
-    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--rose); margin-bottom: 16px;
-  }
-  .popup-title {
-    font-family: var(--f-display); font-size: 26px; font-weight: 700;
-    color: var(--bone); line-height: 1.25; margin-bottom: 14px;
-  }
-  .popup-text {
-    font-size: 15px; font-weight: 300; color: var(--muted);
-    line-height: 1.7; margin-bottom: 28px;
-  }
-  .popup-btn {
-    display: block; width: 100%; text-align: center;
-    background: var(--rose); color: #fff; border: none;
-    padding: 14px 20px; font-family: 'Jost', sans-serif;
-    font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase;
-    cursor: pointer; text-decoration: none;
-    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-    transition: background 0.3s;
-  }
-  .popup-btn:hover { background: var(--rose-lt); }
-  .popup-skip {
-    display: block; text-align: center; margin-top: 14px;
-    font-size: 12px; color: var(--dim); cursor: pointer;
-    letter-spacing: 0.08em;
-  }
-  .popup-skip:hover { color: var(--muted); }
 
-  /* ── ДОСТУПНОСТЬ ── */
+/* ── ДОСТУПНОСТЬ ── */
   .skip-link {
     position: fixed;
     top: -100px;
@@ -1826,29 +1774,10 @@ document.addEventListener('keydown', function(e) {
 
 
 <!-- ══ POPUP ══ -->
-<div class="popup-overlay" id="popup" onclick="if(event.target===this)closePopup()">
-  <div class="popup-box">
-    <button class="popup-close" onclick="closePopup()">✕</button>
-    <div class="popup-label">Специальное предложение</div>
-    <div class="popup-title">Узнайте стоимость выступления для вашего мероприятия</div>
-    <p class="popup-text">Оставьте заявку — мы подберём формат и ответим в течение дня. Концерт, мастер-класс, кочевая зона — обсудим всё.</p>
-    <a href="#contact" class="popup-btn" onclick="closePopup()">Оставить заявку</a>
-    <span class="popup-skip" onclick="closePopup()">Не сейчас</span>
-  </div>
-</div>
 
 <script>
 
-  // ══ POPUP ══
-  let popupShown = false;
-  function openPopup() {
-    if (popupShown || sessionStorage.getItem('popupShown')) return;
-    popupShown = true;
-    sessionStorage.setItem('popupShown', '1');
-    document.getElementById('popup').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  // Вставьте URL после деплоя Cloudflare Worker
+// Вставьте URL после деплоя Cloudflare Worker
   const WORKER_URL = 'https://kochevnik-form.YOUR_SUBDOMAIN.workers.dev';
 
   async function submitForm() {
@@ -1922,16 +1851,6 @@ document.addEventListener('keydown', function(e) {
     el.style.display = 'none';
   }
 
-  function closePopup() {
-    document.getElementById('popup').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  // Через 30 секунд
-  setTimeout(openPopup, 30000);
-  // При уходе со страницы (exit intent)
-  document.addEventListener('mouseleave', function(e) {
-    if (e.clientY <= 0) openPopup();
-  });
 </script>
 
 </body>
