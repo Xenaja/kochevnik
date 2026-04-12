@@ -61,7 +61,7 @@
     --whale:        #2C4E82;
     --whale-lt:     #4A72AA;
     --bone:         #F2EDE8;
-    --muted:        #8A9BB8;
+    --muted:        #ADBAD1;
     --dim:          #2E4068;
     --white:        #FFFFFF;
     --f-display:    'Philosopher', serif;
@@ -225,12 +225,14 @@
 
   .hero-overlay {
     position: absolute; inset: 0; z-index: 1;
-    background: linear-gradient(to right,
-      rgba(4,20,30,0.92) 0%,
-      rgba(4,20,30,0.60) 40%,
-      rgba(4,20,30,0.10) 75%,
-      transparent 100%
-    );
+    background:
+      linear-gradient(to bottom, rgba(4,20,30,0.55) 0%, transparent 45%),
+      linear-gradient(to right,
+        rgba(4,20,30,0.97) 0%,
+        rgba(4,20,30,0.75) 45%,
+        rgba(4,20,30,0.20) 75%,
+        transparent 100%
+      );
   }
 
   /* ── AURORA BOREALIS ── */
@@ -831,11 +833,9 @@
   @media (max-width: 768px) {
     .hero-video { object-position: 60% top; }
     .hero-overlay {
-      background: linear-gradient(to top,
-        rgba(4,20,30,0.96) 0%,
-        rgba(4,20,30,0.70) 50%,
-        rgba(4,20,30,0.30) 100%
-      );
+      background:
+        linear-gradient(to bottom, rgba(4,20,30,0.88) 0%, rgba(4,20,30,0.50) 40%, transparent 70%),
+        linear-gradient(to top,    rgba(4,20,30,0.96) 0%, rgba(4,20,30,0.60) 50%, transparent 100%);
     }
   }
 
@@ -881,7 +881,7 @@
     .programs-grid { grid-template-columns: 1fr; }
     .program-card  { padding: 30px 22px; }
     .program-num   { font-size: 46px; top: 18px; right: 14px; }
-    .program-title { font-size: 22px; }
+    .program-title { font-size: 24px; }
 
     .gallery-grid  { grid-template-columns: 1fr 1fr; gap: 8px; }
     .gallery-item  { height: 200px; }
@@ -906,8 +906,9 @@
     .footer-copy { font-size: 11px; }
 
     body { font-size: 17px; }
-    .program-desc  { font-size: 16px; line-height: 1.75; }
-    .program-meta-item { font-size: 14px; }
+    .program-desc  { font-size: 17px; line-height: 1.8; }
+    .program-meta-item { font-size: 15px; }
+    .faq-a { font-size: 16px; }
     .about-text p  { font-size: 17px; }
     .cta-left p    { font-size: 17px; }
     .contact-line  { font-size: 16px; }
