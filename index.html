@@ -519,17 +519,14 @@
     max-width: 1200px; margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 280px;
-    grid-auto-flow: dense;
-    gap: 8px;
+    gap: 12px;
   }
 
   .gallery-item {
     position: relative; overflow: hidden;
-    cursor: pointer; border: 1px solid var(--dim);
+    cursor: pointer; height: 260px;
+    border-radius: 8px;
   }
-  .gallery-item.landscape { grid-column: span 2; grid-row: span 1; }
-  .gallery-item.portrait  { grid-column: span 1; grid-row: span 2; }
 
   .gallery-item img {
     width: 100%; height: 100%; display: block;
@@ -542,6 +539,7 @@
     content: ''; position: absolute; inset: 0;
     background: linear-gradient(to bottom, transparent 50%, var(--gallery-ov));
     opacity: 0; transition: opacity 0.3s;
+    border-radius: 8px;
   }
   .gallery-item:hover::after { opacity: 1; }
 
@@ -795,7 +793,7 @@
     .about-grid > div:last-child { min-height: 320px; }
     .photo-placeholder { aspect-ratio: 4/3; max-width: 500px; }
     .programs-grid { grid-template-columns: 1fr; gap: 2px; }
-    .gallery-grid  { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 220px; }
+    .gallery-grid  { grid-template-columns: repeat(3, 1fr); gap: 10px; }
     .lead-inner    { grid-template-columns: 1fr; gap: 40px; }
     .faq-grid      { grid-template-columns: 1fr; gap: 2px; }
     .cta-inner     { grid-template-columns: 1fr; gap: 52px; }
@@ -859,10 +857,8 @@
     .program-num   { font-size: 46px; top: 18px; right: 14px; }
     .program-title { font-size: 22px; }
 
-    .gallery-grid  { grid-template-columns: 1fr 1fr; grid-auto-rows: 180px; }
-    .gallery-item.landscape { grid-column: span 2; }
-    .gallery-item.hidden-mobile { display: none; }
-    .gallery-show-more { display: block; }
+    .gallery-grid  { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .gallery-item  { height: 200px; }
 
     .lead-inner  { grid-template-columns: 1fr; gap: 28px; }
     .lead-form   { padding: 26px 18px; }
@@ -1336,7 +1332,7 @@
 
   <!-- ══ ФОТО ДЛЯ ГАЛЕРЕИ: отредактируйте массив galleryPhotos в скрипте ниже ══ -->
   <div class="gallery-grid" id="galleryGrid"></div>
-  <button class="gallery-show-more" id="galleryShowMore" onclick="showAllGallery()">ПОКАЗАТЬ ВСЕ ФОТО</button>
+  <button class="gallery-show-more" id="galleryShowMore" onclick="showMoreGallery()">ПОКАЗАТЬ ЕЩЁ</button>
 
   <div class="gallery-more fade-in"></div>
 </section>
@@ -1537,55 +1533,54 @@
 <script>
   // ══════════════════════════════════════════
   // ГАЛЕРЕЯ — отредактируйте список фото здесь
-  // orient: 'landscape' = горизонтальное (span 2 кол.)
-  //         'portrait'  = вертикальное   (span 2 строки)
   // ══════════════════════════════════════════
   const galleryPhotos = [
-    { src: 'photos/gallery/14.jpg', orient: 'landscape' }, // весь ансамбль на сцене
-    { src: 'photos/gallery/16.jpg', orient: 'portrait'  }, // девушка у яранги зимой
-    { src: 'photos/gallery/11.jpg', orient: 'landscape' }, // двое с бубном, смеются
-    { src: 'photos/gallery/2.jpg',  orient: 'landscape' }, // семья с гусем
-    { src: 'photos/gallery/13.jpg', orient: 'portrait'  }, // сцена с дымом
-    { src: 'photos/gallery/6.jpg',  orient: 'landscape' }, // танцующие девушки
-    { src: 'photos/gallery/1.jpg',  orient: 'landscape' }, // мальчик в костюме
-    { src: 'photos/gallery/8.jpg',  orient: 'portrait'  }, // девушка с колокольчиками
-    { src: 'photos/gallery/7.jpg',  orient: 'landscape' },
-    { src: 'photos/gallery/3.jpg',  orient: 'landscape' },
-    { src: 'photos/gallery/9.jpg',  orient: 'portrait'  }, // яранга у Кремля
-    { src: 'photos/gallery/5.jpg',  orient: 'landscape' },
-    { src: 'photos/gallery/10.jpg', orient: 'landscape' },
-    { src: 'photos/gallery/4.jpg',  orient: 'landscape' },
-    { src: 'photos/gallery/12.jpg', orient: 'landscape' },
-    { src: 'photos/gallery/15.jpg', orient: 'landscape' },
+    'photos/gallery-1/1.jpg',
+    'photos/gallery-1/2.jpg',
+    'photos/gallery-1/3.webp',
+    'photos/gallery-1/4.webp',
+    'photos/gallery-1/5.jpg',
+    'photos/gallery-1/6.webp',
+    'photos/gallery-1/7.jpg',
+    'photos/gallery-1/8.webp',
+    'photos/gallery-1/9.jpg',
+    'photos/gallery-1/10.jpg',
+    'photos/gallery-1/11.jpg',
+    'photos/gallery-1/12.webp',
+    'photos/gallery-1/13.jpg',
+    'photos/gallery-1/14.webp',
+    'photos/gallery-1/15.webp',
   ];
 
   // ══ РЕНДЕР ГАЛЕРЕИ ══
-  const MOBILE_GALLERY_LIMIT = 6;
+  const GALLERY_PAGE_SIZE = 6;
 
   (function renderGallery() {
     const grid = document.getElementById('galleryGrid');
     if (!grid) return;
-    const isMobile = window.innerWidth < 640;
-    galleryPhotos.forEach((photo, i) => {
+    galleryPhotos.forEach((src, i) => {
       const item = document.createElement('div');
-      item.className = 'gallery-item fade-in ' + photo.orient;
-      if (isMobile && i >= MOBILE_GALLERY_LIMIT) item.classList.add('hidden-mobile');
+      item.className = 'gallery-item fade-in';
+      if (i >= GALLERY_PAGE_SIZE) item.style.display = 'none';
       item.onclick = () => openLightbox(i);
       const img = document.createElement('img');
-      img.src = photo.src;
+      img.src = src;
       img.alt = 'Ансамбль Кочевник — фото ' + (i + 1);
       img.loading = 'lazy';
       item.appendChild(img);
       grid.appendChild(item);
     });
-    if (isMobile && galleryPhotos.length > MOBILE_GALLERY_LIMIT) {
+    if (galleryPhotos.length > GALLERY_PAGE_SIZE) {
       document.getElementById('galleryShowMore').style.display = 'block';
     }
   })();
 
-  function showAllGallery() {
-    document.querySelectorAll('.gallery-item.hidden-mobile').forEach(el => el.classList.remove('hidden-mobile'));
-    document.getElementById('galleryShowMore').style.display = 'none';
+  function showMoreGallery() {
+    const hidden = [...document.querySelectorAll('#galleryGrid .gallery-item')].filter(el => el.style.display === 'none');
+    hidden.slice(0, GALLERY_PAGE_SIZE).forEach(el => { el.style.display = ''; });
+    if (hidden.length <= GALLERY_PAGE_SIZE) {
+      document.getElementById('galleryShowMore').style.display = 'none';
+    }
   }
 
   // ══ ЛАЙТБОКС ══
@@ -1614,7 +1609,7 @@
   }
 
   function updateLightbox() {
-    document.getElementById('lightboxImg').src = galleryPhotos[currentPhotoIndex].src;
+    document.getElementById('lightboxImg').src = galleryPhotos[currentPhotoIndex];
     document.getElementById('lightboxCounter').textContent = (currentPhotoIndex + 1) + ' / ' + galleryPhotos.length;
   }
 
