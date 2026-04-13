@@ -539,6 +539,8 @@
     background: var(--dim); transition: background 0.3s;
   }
   .program-card:hover::before { background: var(--rose); }
+  .program-card.card-highlight { background: var(--hover-card); transition: background 0.4s; }
+  .program-card.card-highlight::before { background: var(--rose); transition: background 0.4s; }
 
   .program-num { font-family: var(--f-display); font-size: 64px; font-weight: 300; color: rgba(46,64,104,0.38); line-height: 1; position: absolute; top: 28px; right: 24px; }
   .program-icon { width: 44px; height: 44px; margin-bottom: 24px; }
@@ -1684,6 +1686,19 @@
     { threshold: 0.1 }
   );
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+  // ══ ПОДСВЕТКА КАРТОЧЕК НА МОБИЛЕ при прокрутке ══
+  if (window.matchMedia('(max-width: 768px) and (pointer: coarse)').matches) {
+    const cardObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('card-highlight');
+          setTimeout(() => e.target.classList.remove('card-highlight'), 900);
+        }
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('.program-card').forEach(c => cardObs.observe(c));
+  }
 
   // ══ СЧЁТЧИКИ ══
   const countObs = new IntersectionObserver((entries) => {
