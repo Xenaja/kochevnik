@@ -1722,7 +1722,8 @@
 
   // ══ ТЕМА ДЕНЬ / НОЧЬ ══
   (function initTheme() {
-    const saved = localStorage.getItem('kochevnik-theme') || 'dark';
+    const raw = localStorage.getItem('kochevnik-theme') || 'dark';
+    const saved = raw.replace('chosen:', '');
     document.documentElement.setAttribute('data-theme', saved);
   })();
 
@@ -1730,14 +1731,14 @@
     const current = document.documentElement.getAttribute('data-theme');
     const next = current === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('kochevnik-theme', next);
+    localStorage.setItem('kochevnik-theme', 'chosen:' + next);
     // скрыть подсказку после первого нажатия
     const hint = document.getElementById('themeHint');
     if (hint) hint.style.display = 'none';
   }
 
-  // Не показывать подсказку если тема уже была выбрана пользователем
-  if (localStorage.getItem('kochevnik-theme')) {
+  // Не показывать подсказку если пользователь уже сам переключал тему
+  if ((localStorage.getItem('kochevnik-theme') || '').startsWith('chosen:')) {
     const hint = document.getElementById('themeHint');
     if (hint) hint.style.display = 'none';
   }
