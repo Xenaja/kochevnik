@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://xenaja.github.io/kochevnik/sitemap.xml
+Sitemap: https://ans-kochevnik.ru/sitemap.xml
